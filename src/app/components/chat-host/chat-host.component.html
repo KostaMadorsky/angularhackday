@@ -1,0 +1,9 @@
+<input [(ngModel)]="text" type="text"  />
+<ul>
+  <li *ngFor="let m of messages">
+     {{ m.author }} - {{ m.text }}
+  </li>
+</ul> 
+
+
+<button (click)="post()">Post</button>
