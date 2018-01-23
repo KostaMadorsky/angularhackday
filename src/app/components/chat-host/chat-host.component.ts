@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr-client';
-import { HttpClient } from '@angular/common/http';
-
-interface Message {
-  text: string;
-  author: string;
-}
+import { ChatHostService, HubMessage } from '../../services/chat-host.service';
 
 @Component({
   selector: 'hd-chat-host',
@@ -14,43 +9,43 @@ interface Message {
 })
 
 export class ChatHostComponent implements OnInit {
-  private _hubConnection: HubConnection;
-  messages: Message[];
-  private _msgName = 'messageReceived';
-  private _roomName = 'team1';
+  private _isJoined = false;
+  messages: HubMessage[];
   author: string;
-  private _hub = 'https://angularhackday.azurewebsites.net/chat';
-  private _msgApi = 'https://angularhackday.azurewebsites.net/api/messages';
+  room = 'team1';
 
-  text: string;
+  get isJoined() { return this._isJoined; }
 
-  constructor(private _http: HttpClient) {
+  constructor(private _hubService: ChatHostService) {
     this.messages = [];
     this.author = 'konst';
   }
 
   ngOnInit() {
-    this._hubConnection = new HubConnection(this._hub);
-    this._hubConnection.on(this._msgName, (msg: Message) =>
-      this.messages.push(msg)
-    );
-    this._hubConnection.start().then(() => {
-      this._hubConnection.invoke('JoinRoom', this._roomName);
-    });
+    this._hubService.start();
+
+    this._hubService.messageReceivedEvent$
+      .subscribe((msg: HubMessage) => {
+        this.messages.splice(0, 0, msg);
+      });
   }
 
-  post () {
-    this._http.post(this._msgApi, {
-      'msg': this.text,
-      'author': this.author,
-      'room': this._roomName
-    }).subscribe(
-      res => {
-      },
-      err => {
-      }
-    );
+  toggleConnection() {
+    if (this._isJoined) {
+      this._hubService.leaveRoom();
+      this.messages = [];
+    } else {
+      this._hubService.joinRoom(this.room, this.author);
+    }
+
+    this._isJoined = !this._isJoined;
   }
+
+  post(input: HTMLInputElement) {
+    this._hubService.post2(input.value);
+    input.value = '';
+  }
+
 
 
 

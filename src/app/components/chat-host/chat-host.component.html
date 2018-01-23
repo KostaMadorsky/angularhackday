@@ -1,9 +1,73 @@
-<input [(ngModel)]="text" type="text"  />
-<ul>
-  <li *ngFor="let m of messages">
-     {{ m.author }} - {{ m.text }}
-  </li>
-</ul> 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+      
+      <div class="row">
+        <div class="col-md-5">
+          <div class="input-group">
+            <span class="input-group-addon">Username</span>
+            <input [(ngModel)]="author" [disabled]="isJoined" 
+              #authorInput name="authorInput" required
+              type="text" class="form-control" aria-label="">
+            
+            <div *ngIf="authorInput.invalid && (authorInput.dirty || authorInput.touched)"
+              class="alert alert-danger">Username is required
+            </div>
+    
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="input-group">
+            <span class="input-group-addon">Room</span>
+            <input [(ngModel)]="room" [disabled]="isJoined" required
+              type="text" class="form-control" aria-label="">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button (click)="toggleConnection()" class="btn btn-block"
+            [ngClass]="{
+              'btn-warning': !isJoined,
+              'btn-danger': isJoined
+            }">
+            <span [ngSwitch]="isJoined">
+              <span *ngSwitchCase="false">Join</span>
+              <span *ngSwitchCase="true">Disconnect</span>
+            </span>
+          </button>
+        </div>
+        
+        <div class="col-md-12"><hr></div>
+      </div>
+      
+      <div class="row"  [hidden]="!isJoined">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="comment">Message:</label>
+            <textarea #messageText (keyup.control.enter)="post(messageText)" 
+              placeholder="Type a message. Ctrl + Enter to send." 
+              class="form-control" rows="3"></textarea>
+            <br>
+            <button (click)="post(messageText)" class="btn btn-success">Send</button>
+          </div>
+        </div>
+
+        <div class="col-md-12"><hr></div>
+      </div>
+
+      <div class="row" [hidden]="!isJoined">
+        <div class="col-md-12">
+          <div class="message-list">
+            <ng-container *ngFor="let m of messages">
+              <hub-message [message]="m" [isMine]="m.author.name === author" ></hub-message>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
-<button (click)="post()">Post</button>
+
+

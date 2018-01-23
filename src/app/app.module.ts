@@ -8,12 +8,17 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { ChatHostComponent } from './components/chat-host/chat-host.component';
+import { ChatHostService } from './services/chat-host.service';
+import { TestComponent } from './components/test/test.component';
+import { HubMessageComponent } from './components/hub-message/hub-message.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatHostComponent
+    ChatHostComponent,
+    TestComponent,
+    HubMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +26,7 @@ import { ChatHostComponent } from './components/chat-host/chat-host.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ChatHostService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

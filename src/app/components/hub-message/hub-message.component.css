@@ -1,0 +1,8 @@
+pre {
+  background-color: inherit;
+  border: 0px;
+}
+
+.panel.my-message .panel-heading {
+  background-color: #b2b2fc
+}

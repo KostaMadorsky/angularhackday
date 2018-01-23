@@ -4,5 +4,12 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  chatHub: {
+    hub: 'http://localhost:2575/chat',
+    msgApi: 'http://localhost:2575/api/messages',
+    msgEventName: 'onMessageReceived',
+    joinMethodName: 'JoinRoom',
+    leaveMethodName: 'Leave'
+  }
 };

@@ -1,0 +1,9 @@
+<div class="panel panel-default" [class.my-message]="isMine">
+  <div class="panel-heading">
+    {{ message.author.name }} 
+    <span class="pull-right">{{ message.dateSent | date:'medium' }}</span>
+  </div>
+  <div class="panel-body"> 
+    <pre>{{ message.text }}</pre>
+  </div>
+</div>
